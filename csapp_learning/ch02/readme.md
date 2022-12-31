@@ -13,12 +13,14 @@
 ## 1.3 大小端
 - 数小端法: 从最低到最高有效位, 按地址从低到高排序(Intel, IOS)
 - 数大端法: 从最高到最底有效位, 按地址从低到高排序(Oracle, IBM)
-- 字符串: `\0` 结尾, 按字符顺序存储 (show_bytes.cc, little_endian.cc)
+- 字符串: `\0` 结尾, 按字符顺序存储 
+- [show_bytes.cc](show_bytes.cc), [little_endian.cc](little_endian.cc)
 
 ## 1.4 布尔代数
 - 位向量: 用 w 位表示集合中每个元素是否存在
 - 布尔运算: `|`, `&` 和 `~` 运算, 其中 `&` 与 `|` 互相存在分配律
-- 布尔环: `^`, `&` 和 `~` 运算, `^` 自身为加法逆元 (inplace_swap.cc)
+- 布尔环: `^`, `&` 和 `~` 运算, `^` 自身为加法逆元 
+- [inplace_swap.cc](inplace_swap.cc)
 
 |     | 0    | 1    |
 |-----|------|------|
@@ -36,11 +38,11 @@
 
 # 2 整数表示
 ## 2.1 双射编码
-- 无符号数 : B2Uw
+- 无符号数: B2Uw
 - 补码(Two's complement): B2Tw 不对称, T_max+1=|T_min| 是一个 corner case, 10000-x
 - 原码(Sign-Magnitude):   B2Sw 对称双零
 - 反码(Ones' complement): B2Ow 对称双零, 1111-x
-- 具体范围见(show_range.cc)
+- 具体范围见 [show_range.cc](show_range.cc)
 
 ## 2.2 有符号和无符号转换
 - T2Uw: 负数->加两倍最高位权 
@@ -52,8 +54,8 @@
 ## 2.3 扩展与截断
 - 无符号扩展 加零, 有符号扩展 加符号位
 - C 语言规则 规定 小整型运算时会先整型提升, 然后进行有符号和无符号转换
-- 无符号截断为k位 : x mod 2^k
-- 有符号截断为k为 : U2T( T2U mod 2^k ), 若负截断为正则 +2^k(特殊的模)
+- 无符号截断为k位: x mod 2^k
+- 有符号截断为k为: U2T( T2U mod 2^k ), 若负截断为正则 +2^k(特殊的模)
 
 # 3 整数运算
 ## 3.1 无符号加法
@@ -76,7 +78,7 @@
 - 无符号乘法 x\*y = x\*y mod2^w
 - 补码乘法 x\*y = U2T((x\*y) mod 2^w)
 - 补码乘法位级等价性证明
-- 加法, 减法, 乘法溢出判断见 (operation_ok.cc)
+- 加法, 减法, 乘法溢出判断 见 [operation_ok.cc](operation_ok.cc)
 
 ## 3.4 乘除常数
 - 无符号数与补码 乘以 2^k 等价 左移k位
@@ -89,10 +91,10 @@
   - 正数向下取整
   - 负数也向下取整, 需要调整
 - 上取整与下取整转换:
-  - $$\lceil x/y \rceil = \lfloor (x+y-1)/y \rfloor$$
-  - $$\lfloor x/y \rfloor = \lceil (x-y+1)/y \rceil$$
+  - $\lceil x/y \rceil = \lfloor (x+y-1)/y \rfloor$
+  - $\lfloor x/y \rfloor = \lceil (x-y+1)/y \rceil$
 - 偏置法: 每次右移位, 舍掉1则末位+1, 舍掉0则末位+0
-- 公式法: (x+(1<<k)-1)>>k (x< 0) 见 (int_div.cc)
+- 公式法: (x+(1<<k)-1)>>k (x< 0) 见 [int_div.cc](int_div.cc)
 
 ## 3.5 其他
 - -m32, -m64 为gcc 编译位数选项
@@ -104,7 +106,7 @@
 # 4 浮点数
 ## 4.1 IEEE 浮点表示
 - 近似表示, 精度有限, 不可结合
-- 表示方式 : V = (-1)^s \* 2^E \* M 分别为 符号, 阶码和尾数
+- 表示方式: V = (-1)^s \* 2^E \* M 分别为 符号, 阶码和尾数
 - 分布 : 1+8+23 / 1+11+52 
 - 三种特殊浮点 : 
     - 规格化的 : 不为0, 不为255
