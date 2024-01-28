@@ -1,4 +1,11 @@
+#if defined(__clang__)
+#include "arpa/inet.h"
+#elif defined(__GNUC__) || defined(__GNUG__)
+#include "arpa/inet.h"
+#elif defined(_MSC_VER)
 #include <winsock2.h>
+#endif
+
 #include <iostream>
 #include <format>
 
