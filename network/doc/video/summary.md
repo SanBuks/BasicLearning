@@ -1,23 +1,29 @@
 # 1-1: A day in the life of an application
 - 流模型: 可靠的, 双向字节流 
 - http: 超文本, GET请求
-- bittorrent: 数据段, 集群, Tracker
-- skype: NAT, Rendezvous 解决一端处于 NAT 后问题, Relay 解决两端处于 NAT 后问题
+- bittorrent: 文件被分为多个数据段, 由集群管理, Torrent 种子文件记录了 Tracker(记录集群信息的特殊节点)
+- skype: NAT(network address translator)
+  - 红绿屏障 
+  - Rendezvous 解决一端处于 NAT 后问题: (A->B) B 主动连接 Rendezvous, 通过提示, B 主动连接 A
+  - Relay 解决两端处于 NAT 后问题: Relay 转发, A 与 B 主动连接 Relay
 
 # 1-2: The four layer Internet model
-- 链路层(link): 
-  - 作用: 通过链路传送数据包(datagram->packets->frames), 逐一段链路传递
+- 物理层(physic):
+  - 作用: 将帧的每个比特传输到下一个节点 
+  - 特点: 协议与链路层和实际传输媒介相关
+- 链路层(link): 帧(frames)
+  - 作用: 通过链路传送帧, 逐一段链路(主机/路由)传递
   - 协议: WiFi / Ethernet / 5G 
   - 特点: 具体实现不同
-- 网络层(network):
-  - 作用: 端到端传送数据报(datagram)
-  - 协议: IP协议(Thin Waist)
+- 网络层(network): 数据报(datagram)
+  - 作用: 主机到主机传送数据报
+  - 协议: IP协议(Thin Waist), 包括路由选择协议, 网际协议
   - 特点: 最大努力传递但不保证正确, 可能存在丢失/乱序/破坏
-- 传输层(transport): 
-  - 作用: 端到端传递数据段(segment)
+- 传输层(transport): 报文段(segment) 
+  - 作用: 程序端到端传递报文段
   - TCP协议(Transmit Control Protocol): 面向连接, 确保正确且有序, 流量控制, 拥塞控制
   - UDP协议(User Datagram Protocol): 无连接, 无可靠性, 无流量控制, 无拥塞控制
-- 应用层(Application): 
+- 应用层(app): 报文(message)
   - 作用: 定义信息交流语义, 建立流模型
   - 协议: HTTP等
 
