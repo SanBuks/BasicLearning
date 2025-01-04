@@ -7,3 +7,5 @@ add_executable(show_range    show_range.cc)
 add_executable(operation_ok  operation_ok.cc)
 add_executable(int_div       int_div.cc)
 add_executable(show_float    show_float.cc)
+
+add_executable(testfile          test.cc)

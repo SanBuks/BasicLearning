@@ -1,0 +1,14 @@
+- LAN 局域网, 集线器(广播), 路由器, WAN 广域网
+- 0xC0A80001(192.168.0.1) 
+  - 小端实际存储方式 0x01C0A800 
+  - 大端实际存储方式 0xC0A80001 
+  - 大端序在小端的表示(1.0.168.192)
+- DNS(Domain Name System), nslookup
+- 套接字对(ip:端口), /etc/services
+- socket api:
+  - socket 
+  - connect
+  - bind
+  - listen
+  - accept
+  - close

@@ -2,7 +2,7 @@
  * CS:APP Data Lab 
  * 
  * <Please put your name and userid here>
- * 
+ * san no-id
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
  *
@@ -143,7 +143,9 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  // 通过 德摩根率将 | 消除
+  // x xor y == ~x&y | x&~y => ~~(~x&y | x&~y)
+  return ~(~x&~y) & ~(x&y);
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -152,9 +154,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
-  return 2;
-
+  return 0x01 << 31;
 }
 //2
 /*
@@ -165,7 +165,10 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  // -Tmin = Tmin 判断是否是 Tmin, 再判断是否是特例 0
+  // return !((x+1)^(~(x+1)+1)) & !!((x+1)^0);
+  // ~Tmax = ~(Tmax + 1) 判断是否是 Tmax, 再判断是否是特例 0
+  return !((x^(~(x+1)))) & !!((x+1)^0);
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,7 +179,9 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int AAAA = ((0xAA << 8) + 0xAA);
+  int mask = (AAAA << 16) + AAAA;
+  return !((x&mask)^mask);
 }
 /* 
  * negate - return -x 
@@ -186,7 +191,7 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x+1;
 }
 //3
 /* 
@@ -199,7 +204,11 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  // 0x30 - x - 1 < 0
+  int a = !!((0x30 + ~x) >> 31);
+  // x - 0x39 - 1 < 0
+  int b = !!((x + ~0x39) >> 31);
+  return a & b;
 }
 /* 
  * conditional - same as x ? y : z 
@@ -209,7 +218,9 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int exp1 = !!(x ^ 0) << 31 >> 31;
+  int exp2 = ~exp1;
+  return (y & exp1) | (z & exp2);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -219,7 +230,9 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  int a = !!((x + ~y + 1) >> 31);
+  int b = !((x + ~y + 1) ^ 0);
+  return a | b;
 }
 //4
 /* 
