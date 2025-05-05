@@ -1,39 +1,57 @@
 # 1-1: A day in the life of an application
-- 流模型: 可靠的, 双向字节流 
-- http: 超文本, GET请求
-- bittorrent: 文件被分为多个数据段, 由集群管理, Torrent 种子文件记录了 Tracker(记录集群信息的特殊节点)
-- skype: NAT(network address translator)
-  - 红绿屏障 
-  - Rendezvous 解决一端处于 NAT 后问题: (A->B) B 主动连接 Rendezvous, 通过提示, B 主动连接 A
-  - Relay 解决两端处于 NAT 后问题: Relay 转发, A 与 B 主动连接 Relay
+## 字节流模型
+- 可靠的, 双向, 字节流
+- 两个程序通过网络建立通讯的模型, 可以由任意一端关闭
+- 优点: 抽象整个网络功能
+
+## 不同例子
+- HTTP: 超文本传输协议
+  - 输入网页地址, 浏览器与服务器建立连接
+  - 发送 GET 请求
+  - 获取回应
+- BitTorrent: 
+  - 文件被分为多个数据段(Pieces) 
+  - 集群(Swarm): 分布式的客户端, 可以互相分享数据段
+  - Torrent: 记录 Tracker 服务器信息
+  - Tracker: 用户通过 HTTP 获取集群信息, 分别建立连接, 监听客户端的加入和离开并及时通知
+- Skype: NAT(Network Address Translator)
+  - 红绿屏障(类似二极管, 可以从绿色端建立连接, 反向不可以) 
+  - Rendezvous(约会服务器) 解决一端处于 NAT 后问题: (A->B)
+    - B 预先连接中继 
+    - A 主动连接中继
+    - 中继提示 B, B 主动连接 A
+  - Relay(中继服务器) 解决两端处于 NAT 后问题: 
+    - Relay 转发
+    - A 与 B 主动连接 Relay
 
 # 1-2: The four layer Internet model
+- 4 层模型: 模块化, 按照依赖分层, 方便复用
 - 物理层(physic):
   - 作用: 将帧的每个比特传输到下一个节点 
   - 特点: 协议与链路层和实际传输媒介相关
 - 链路层(link): 帧(frames)
-  - 作用: 通过链路传送帧, 逐一段链路(主机/路由)传递
+  - 作用: 通过链路传送帧, 逐一段(hop by hop)链路(主机/路由)传递分组信息(packet), 传输地点由帧内容指定
   - 协议: WiFi / Ethernet / 5G 
   - 特点: 具体实现不同
 - 网络层(network): 数据报(datagram)
-  - 作用: 主机到主机传送数据报
+  - 作用: 主机到主机传送数据报(指定传输路线, 传输不可靠数据)
   - 协议: IP协议(Thin Waist), 包括路由选择协议, 网际协议
   - 特点: 最大努力传递但不保证正确, 可能存在丢失/乱序/破坏
-- 传输层(transport): 报文段(segment) 
-  - 作用: 程序端到端传递报文段
+- 传输层(transport): 报文段(segment)
+  - 作用: 程序端到端传递报文段(向应用层提供可靠传输)
   - TCP协议(Transmit Control Protocol): 面向连接, 确保正确且有序, 流量控制, 拥塞控制
   - UDP协议(User Datagram Protocol): 无连接, 无可靠性, 无流量控制, 无拥塞控制
 - 应用层(app): 报文(message)
-  - 作用: 定义信息交流语义, 建立流模型
+  - 作用: 定义信息交流语义, 建立字节流模型
   - 协议: HTTP等
 
 # 1-3: The IP service model 
-- 数据报: IP-data | IP-hdr(SA | DA) -> link-frame data | link-frame hdr -> packets
-- 传递方式: packets hop-by-hop routing
-- 特点: 不可靠, 最大努力传递, 无连接(无相关状态)
+- 数据报: `[IP-data | IP-hdr(SA | DA)] -> [link-frame data | link-frame hdr] (divided packets)`
+- 传递方式: packets, hop-by-hop, routing
+- 特点: 分组数据报, 不可靠, 最大努力传递, 无连接(建立或断开没有相关状态)
 - 设计的原因:
   - 成本低: 设备使用广泛需要降低成本
-  - 端到端原则: 可能的可实现的特性尽量在端点处实现, 连接部分尽可能简单
+  - 端到端原则: 复杂的, 可实现的特性尽量在端处实现, 连接部分尽可能简单
   - 保留可拓展性: 比如允许可靠和不可靠传输构建
   - 对于链路层的要求少: 作用于任何一个链路层
 - 细节:  
@@ -46,7 +64,7 @@
 -----------------------------------------------------
   - Version(4): IP版本号
   - Header Length(4): 头部长度(提示存在额外字段) 
-  - Type of Service(8): 提示重要性
+  - Type of Service(8): 提示路由重要性
   - Total Packet Length(16): 整体数据报长度(包含头部)
 -----------------------------------------------------
   - Packet ID(16): 分段
@@ -157,7 +175,6 @@
 - 68:A8:6D:05:85:22
 - 192.168.0.5
 ```
-
 
 # 2-1 TCP service model
 - 

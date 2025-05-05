@@ -1,0 +1,3 @@
+- Ring Buffer
+- `[start_pos(起始下标) + len(数据长度)]  % capa(容量) = 后续地址`
+- 
